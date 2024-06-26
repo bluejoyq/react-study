@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactNode, useState } from "react";
-import { ModalContext } from "./useModal";
+import { ModalContext } from "./ModalContext";
 
 export const ModalProvider = ({ children }: PropsWithChildren) => {
   const [modals, setModals] = useState<ReactNode[]>([]);
