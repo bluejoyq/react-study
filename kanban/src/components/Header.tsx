@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useModalContext } from "../hooks/useModal";
+import { useModalContext } from "../hooks/useModalContext";
 import { KanbanColumnModel } from "../models/Kanban";
 
 interface AddIssueModalProps {

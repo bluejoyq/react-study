@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useModalContext } from "../hooks/useModal";
+import { useModalContext } from "../hooks/useModalContext";
 import { IssueModel } from "../models/Kanban";
 
 interface RemoveModalProps {

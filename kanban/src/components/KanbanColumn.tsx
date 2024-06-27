@@ -1,7 +1,7 @@
-import { DragEvent, useState } from "react";
+import { useState } from "react";
 import { IssueModel, KanbanColumnModel } from "../models/Kanban";
 import { KanbanIssue } from "./KanbanIssue";
-import { useModalContext } from "../hooks/useModal";
+import { useModalContext } from "../hooks/useModalContext";
 
 interface KanbanRenameModalProps {
   closeModal: () => void;
