@@ -88,12 +88,15 @@ export const KanbanColumn = ({
   renameColumn,
   removeColumn,
 }: KanbanColumnProps) => {
-  const handleDragDrop = (e: React.DragEvent, dropedStatus: string) => {
-    const issue = JSON.parse(e.dataTransfer.getData("issue"));
-    moveIssue(issue, dropedStatus);
-  };
   const { issues, id, name } = kanbanColumn;
+
+  const [isDragIn, setIsDragIn] = useState(false);
   const { openModal, closeModal } = useModalContext();
+  const handleDragDrop = (e: React.DragEvent) => {
+    const issue = JSON.parse(e.dataTransfer.getData("issue"));
+    moveIssue(issue, kanbanColumn.id);
+    setIsDragIn(false);
+  };
   const handleOpenRenameModal = () => {
     openModal(
       <KanbanRenameModal
@@ -112,16 +115,25 @@ export const KanbanColumn = ({
       />,
     );
   };
+
+  const handleDragEnter = (e: React.DragEvent) => {
+    if (e.currentTarget !== e.target) return;
+    setIsDragIn(true);
+  };
+  const handleDragLeave = (e: React.DragEvent) => {
+    if (e.currentTarget !== e.target) return;
+    setIsDragIn(false);
+  };
   return (
     <section
       key={id}
       className="flex flex-col border-black border-2 w-48 overflow-y-auto gap-2 p-2 flex-shrink-0"
-      onDrop={(e) => {
-        handleDragDrop(e, id);
-      }}
+      onDrop={handleDragDrop}
       onDragOver={(e) => {
         e.preventDefault();
       }}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
     >
       <header className="flex justify-between">
         <h2 className="m-0">{name}</h2>
@@ -137,6 +149,9 @@ export const KanbanColumn = ({
       {issues.map((issue) => (
         <KanbanIssue key={issue.id} issue={issue} removeIssue={removeIssue} />
       ))}
+      {isDragIn && (
+        <div className="border-2 border-dashed h-28 pointer-events-none" />
+      )}
     </section>
   );
 };
