@@ -4,11 +4,15 @@ import { useKanban } from "./hooks/useKanban";
 import { KanbanColumn } from "./components/KanbanColumn";
 
 function App() {
-  const { kanban, addIssue, addColumn, moveIssue, removeIssue } = useKanban([
-    "a",
-    "b",
-    "c",
-  ]);
+  const {
+    kanban,
+    addIssue,
+    addColumn,
+    moveIssue,
+    removeIssue,
+    renameColumn,
+    removeColumn,
+  } = useKanban(["a", "b", "c"]);
   const columns = kanban.columns;
   const columnIds = Object.keys(columns);
 
@@ -24,6 +28,8 @@ function App() {
               kanbanColumn={kanbanColumn}
               moveIssue={moveIssue}
               removeIssue={removeIssue}
+              renameColumn={renameColumn}
+              removeColumn={removeColumn}
             />
           );
         })}

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useModalContext } from "../hooks/useModal";
-import { IssueModel } from "../models/Kanban";
+import { KanbanColumnModel } from "../models/Kanban";
 
 interface AddIssueModalProps {
   closeModal: () => void;
-  addIssue: (issue: IssueModel) => void;
+  addIssue: (title: string, description: string) => void;
 }
 
 const AddIssueModal = ({ closeModal, addIssue }: AddIssueModalProps) => {
@@ -13,14 +13,7 @@ const AddIssueModal = ({ closeModal, addIssue }: AddIssueModalProps) => {
 
   const handleAddIssue = () => {
     if (!title || !description) return alert("제목과 설명을 입력해주세요.");
-    addIssue({
-      id: `${Date.now()}`,
-      title: title,
-      description: description,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      columnId: "a",
-    });
+    addIssue(title, description);
     closeModal();
   };
   return (
@@ -51,8 +44,8 @@ const AddIssueModal = ({ closeModal, addIssue }: AddIssueModalProps) => {
 };
 
 interface HeaderProps {
-  addIssue: (issue: IssueModel) => void;
-  addColumn: (status: string) => void;
+  addIssue: (title: string, description: string) => void;
+  addColumn: (column: KanbanColumnModel) => void;
 }
 export const Header = ({ addIssue, addColumn }: HeaderProps) => {
   const { openModal, closeModal } = useModalContext();
@@ -61,7 +54,11 @@ export const Header = ({ addIssue, addColumn }: HeaderProps) => {
   };
 
   const handleAddColumn = () => {
-    addColumn("d");
+    addColumn({
+      id: `${Date.now()}`,
+      name: "새 칼럼",
+      issues: [],
+    });
   };
   return (
     <header className="prose flex gap-2">

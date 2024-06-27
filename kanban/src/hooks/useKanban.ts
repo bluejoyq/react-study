@@ -1,13 +1,14 @@
 import { IssueModel, KanbanModel, KanbanColumnModel } from "../models/Kanban";
 import { useSavedState } from "./useSavedState";
 
-export const useKanban = (initialColumnIds: string[]) => {
+export const useKanban = (initialColumnNames: string[]) => {
   const _initState = () =>
-    initialColumnIds.reduce(
-      (acc, id) => {
+    initialColumnNames.reduce(
+      (acc, name, idx) => {
+        const id = `${idx}`;
         acc[id] = {
           id,
-          name: id,
+          name: name,
           issues: [],
         };
         return acc;
@@ -18,14 +19,23 @@ export const useKanban = (initialColumnIds: string[]) => {
     columns: _initState(),
   });
 
-  const addIssue = (issue: IssueModel) => {
+  const addIssue = (title: string, description: string) => {
     setKanban((prev) => {
-      const targetColumn = prev.columns[issue.columnId];
+      const targetId = Object.keys(prev.columns)[0];
+      const newIssue: IssueModel = {
+        id: `${Date.now()}`,
+        title,
+        description,
+        columnId: targetId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      const targetColumn = prev.columns[targetId];
       const newColumns = {
         ...prev.columns,
-        [issue.columnId]: {
+        [targetId]: {
           ...targetColumn,
-          issues: [...targetColumn.issues, issue],
+          issues: [...targetColumn.issues, newIssue],
         },
       };
       return {
@@ -75,20 +85,33 @@ export const useKanban = (initialColumnIds: string[]) => {
       return;
     }
     removeIssue(issue);
-    addIssue({ ...issue, columnId: columnId, updatedAt: new Date() });
+    const movingIssue = {
+      ...issue,
+      columnId,
+      updatedAt: new Date(),
+    };
+    setKanban((prev) => {
+      const targetColumn = prev.columns[columnId];
+      const newColumns = {
+        ...prev.columns,
+        [columnId]: {
+          ...targetColumn,
+          issues: [...targetColumn.issues, movingIssue],
+        },
+      };
+      return {
+        columns: newColumns,
+      };
+    });
   };
 
-  const addColumn = (columnId: string) => {
-    if (kanban.columns[columnId]) {
+  const addColumn = (column: KanbanColumnModel) => {
+    if (kanban.columns[column.id]) {
       throw new Error("이미 존재하는 칼럼입니다.");
     }
     const newColumns = {
       ...kanban.columns,
-      [columnId]: {
-        id: columnId,
-        name: columnId,
-        issues: [],
-      },
+      [column.id]: column,
     };
     setKanban({ columns: newColumns });
   };
@@ -111,6 +134,18 @@ export const useKanban = (initialColumnIds: string[]) => {
     delete newColumns[columnId];
     setKanban({ columns: newColumns });
   };
+
+  const renameColumn = (columnId: string, name: string) => {
+    const targetColumn = kanban.columns[columnId];
+    const newColumns = {
+      ...kanban.columns,
+      [columnId]: {
+        ...targetColumn,
+        name,
+      },
+    };
+    setKanban({ columns: newColumns });
+  };
   return {
     kanban,
     addColumn,
@@ -119,5 +154,6 @@ export const useKanban = (initialColumnIds: string[]) => {
     removeIssue,
     updateIssue,
     moveIssue,
+    renameColumn,
   };
 };
