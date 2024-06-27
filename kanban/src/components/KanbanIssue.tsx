@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useModalContext } from "../hooks/useModal";
 import { IssueModel } from "../models/Kanban";
 
@@ -29,8 +30,14 @@ export const KanbanIssue = ({
   issue: IssueModel;
   removeIssue: (issue: IssueModel) => void;
 }) => {
+  const [isDragging, setIsDragging] = useState(false);
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData("issue", JSON.stringify(issue));
+    setIsDragging(true);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
   };
   const handleRemoveIssue = () => {
     removeIssue(issue);
@@ -46,8 +53,9 @@ export const KanbanIssue = ({
   return (
     <div
       draggable
-      className="border-black border-2 p-1"
+      className={`border-black border-2 p-1 ${isDragging ? "bg-gray-200" : ""}`}
       onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
     >
       <h3 className="m-0">{issue.title}</h3>
       <p className="m-0">{issue.description}</p>
