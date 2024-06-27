@@ -1,4 +1,4 @@
-import { useModal } from "../hooks/useModal";
+import { useModalContext } from "../hooks/useModal";
 import { IssueModel } from "../models/Kanban";
 
 interface RemoveModalProps {
@@ -42,7 +42,7 @@ export const KanbanIssue = <IssueStatus extends string>({
     );
   };
 
-  const { openModal, closeModal } = useModal();
+  const { openModal, closeModal } = useModalContext();
   return (
     <div
       draggable

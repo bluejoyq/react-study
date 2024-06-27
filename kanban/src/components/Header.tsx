@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useModal } from "../hooks/useModal";
+import { useModalContext } from "../hooks/useModal";
 import { IssueModel } from "../models/Kanban";
 
 interface AddIssueModalProps {
@@ -19,7 +19,7 @@ const AddIssueModal = ({ closeModal, addIssue }: AddIssueModalProps) => {
       description: description,
       createdAt: new Date(),
       updatedAt: new Date(),
-      status: "a",
+      columnId: "a",
     });
     closeModal();
   };
@@ -55,7 +55,7 @@ interface HeaderProps {
   addColumn: (status: string) => void;
 }
 export const Header = ({ addIssue, addColumn }: HeaderProps) => {
-  const { openModal, closeModal } = useModal();
+  const { openModal, closeModal } = useModalContext();
   const handleOpenAddIssueModal = () => {
     openModal(<AddIssueModal closeModal={closeModal} addIssue={addIssue} />);
   };

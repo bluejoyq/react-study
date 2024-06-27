@@ -1,16 +1,14 @@
-import { IssueModel } from "../models/Kanban";
+import { IssueModel, KanbanColumnModel } from "../models/Kanban";
 import { KanbanIssue } from "./KanbanIssue";
 
 interface KanbanColumnProps {
-  issues: IssueModel[];
-  status: string;
+  kanbanColumn: KanbanColumnModel;
   moveIssue: (issue: IssueModel, status: string) => void;
   removeIssue: (issue: IssueModel) => void;
 }
 
 export const KanbanColumn = ({
-  issues,
-  status,
+  kanbanColumn,
   moveIssue,
   removeIssue,
 }: KanbanColumnProps) => {
@@ -18,18 +16,19 @@ export const KanbanColumn = ({
     const issue = JSON.parse(e.dataTransfer.getData("issue"));
     moveIssue(issue, dropedStatus);
   };
+  const { issues, id, name } = kanbanColumn;
   return (
     <section
-      key={status}
+      key={id}
       className="flex-1 border-black border-2"
       onDrop={(e) => {
-        handleDragDrop(e, status);
+        handleDragDrop(e, id);
       }}
       onDragOver={(e) => {
         e.preventDefault();
       }}
     >
-      <h2 className="h2">{status}</h2>
+      <h2 className="h2">{name}</h2>
       {issues.map((issue) => (
         <KanbanIssue key={issue.id} issue={issue} removeIssue={removeIssue} />
       ))}

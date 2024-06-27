@@ -1,11 +1,16 @@
-export interface IssueModel<IssueStatus extends string = string> {
+export interface KanbanColumnModel {
+  issues: IssueModel[];
+  id: string;
+  name: string;
+}
+export interface IssueModel {
   id: string;
   title: string;
   description: string;
   createdAt: Date;
   updatedAt: Date;
-  status: IssueStatus;
+  columnId: string;
 }
-export interface Kanban<IssueStatus extends string = string> {
-  columns: Record<IssueStatus, IssueModel<IssueStatus>[]>;
+export interface KanbanModel {
+  columns: Record<string, KanbanColumnModel>;
 }
