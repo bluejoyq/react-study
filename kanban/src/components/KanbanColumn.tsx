@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { DragEvent, useState } from "react";
 import { IssueModel, KanbanColumnModel } from "../models/Kanban";
 import { KanbanIssue } from "./KanbanIssue";
 import { useModalContext } from "../hooks/useModal";
@@ -116,12 +116,10 @@ export const KanbanColumn = ({
     );
   };
 
-  const handleDragEnter = (e: React.DragEvent) => {
-    if (e.currentTarget !== e.target) return;
+  const handleDragEnter = () => {
     setIsDragIn(true);
   };
-  const handleDragLeave = (e: React.DragEvent) => {
-    if (e.currentTarget !== e.target) return;
+  const handleDragLeave = () => {
     setIsDragIn(false);
   };
   return (
@@ -129,9 +127,7 @@ export const KanbanColumn = ({
       key={id}
       className="flex flex-col border-black border-2 w-48 overflow-y-auto gap-2 p-2 flex-shrink-0"
       onDrop={handleDragDrop}
-      onDragOver={(e) => {
-        e.preventDefault();
-      }}
+      onDragOver={(e) => e.preventDefault()}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
     >
