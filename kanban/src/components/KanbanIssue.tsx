@@ -22,12 +22,12 @@ const RemoveModal = ({ closeModal, removeIssue }: RemoveModalProps) => {
   );
 };
 
-export const KanbanIssue = <IssueStatus extends string>({
+export const KanbanIssue = ({
   issue,
   removeIssue,
 }: {
-  issue: IssueModel<IssueStatus>;
-  removeIssue: (issue: IssueModel<IssueStatus>) => void;
+  issue: IssueModel;
+  removeIssue: (issue: IssueModel) => void;
 }) => {
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.setData("issue", JSON.stringify(issue));
@@ -46,11 +46,11 @@ export const KanbanIssue = <IssueStatus extends string>({
   return (
     <div
       draggable
-      className="border-black border-2"
+      className="border-black border-2 p-1"
       onDragStart={handleDragStart}
     >
-      <h3>{issue.title}</h3>
-      <p>{issue.description}</p>
+      <h3 className="m-0">{issue.title}</h3>
+      <p className="m-0">{issue.description}</p>
       <div className="flex gap-2">
         <button className="btn">수정</button>
         <button className="btn" onClick={handleOpenRemoveModal}>

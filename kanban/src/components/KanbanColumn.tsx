@@ -115,7 +115,7 @@ export const KanbanColumn = ({
   return (
     <section
       key={id}
-      className="flex-1 border-black border-2"
+      className="flex flex-col border-black border-2 w-48 overflow-y-auto gap-2 p-2 flex-shrink-0"
       onDrop={(e) => {
         handleDragDrop(e, id);
       }}
@@ -124,7 +124,7 @@ export const KanbanColumn = ({
       }}
     >
       <header className="flex justify-between">
-        <h2 className="h2">{name}</h2>
+        <h2 className="m-0">{name}</h2>
         <div>
           <button onClick={handleOpenRenameModal} className="btn">
             수정

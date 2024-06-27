@@ -18,22 +18,24 @@ function App() {
 
   return (
     <ModalProvider>
-      <Header addColumn={addColumn} addIssue={addIssue} />
-      <main className="prose flex flex-row gap-2">
-        {columnIds.map((columnStatus) => {
-          const kanbanColumn = columns[columnStatus] ?? [];
-          return (
-            <KanbanColumn
-              key={columnStatus}
-              kanbanColumn={kanbanColumn}
-              moveIssue={moveIssue}
-              removeIssue={removeIssue}
-              renameColumn={renameColumn}
-              removeColumn={removeColumn}
-            />
-          );
-        })}
-      </main>
+      <div className="h-screen w-screen flex flex-col p-5">
+        <Header addColumn={addColumn} addIssue={addIssue} />
+        <main className="prose flex flex-row gap-2 flex-1 overflow-auto w-full min-w-full">
+          {columnIds.map((columnStatus) => {
+            const kanbanColumn = columns[columnStatus] ?? [];
+            return (
+              <KanbanColumn
+                key={columnStatus}
+                kanbanColumn={kanbanColumn}
+                moveIssue={moveIssue}
+                removeIssue={removeIssue}
+                renameColumn={renameColumn}
+                removeColumn={removeColumn}
+              />
+            );
+          })}
+        </main>
+      </div>
     </ModalProvider>
   );
 }
