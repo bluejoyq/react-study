@@ -12,7 +12,7 @@ function App() {
     removeIssue,
     renameColumn,
     removeColumn,
-  } = useKanban(["a", "b", "c"]);
+  } = useKanban(["할 일", "진행 중", "완료"]);
   const columns = kanban.columns;
   const columnIds = Object.keys(columns);
 
