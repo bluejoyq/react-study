@@ -1,6 +1,8 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getSalesData } from "./remotes/getSalesData";
 import { Suspense, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { isNetworkError } from "../../utils/error";
 
 export default function Home() {
   const [startDate, setStartDate] = useState("2024-09-01");
@@ -19,9 +21,20 @@ export default function Home() {
           onChange={(e) => setEndDate(e.target.value)}
         />
       </div>
-      <Suspense>
-        <Content startDate={startDate} endDate={endDate} />
-      </Suspense>
+      <ErrorBoundary
+        fallbackRender={({ error }) => {
+          if (isNetworkError(error)) {
+            if (error.response.status === 400) {
+              return <div>Invalid date range</div>;
+            }
+          }
+          throw error;
+        }}
+      >
+        <Suspense fallback={"...loading"}>
+          <Content startDate={startDate} endDate={endDate} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }
@@ -40,6 +53,7 @@ const Content = ({
         startDate,
         endDate,
       }),
+    retry: 0,
   });
   return (
     <div className="flex flex-col gap-4">
